@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { v4 as uuid } from "uuid";
-import { Task } from "../types/Task";
+import { Priority, Task } from "../types/Task";
 import TaskForm from "../components/TaskForm";
 import TaskList from "../components/TaskList";
 import TaskFilter from "../components/TaskFilter";
@@ -12,24 +12,29 @@ export default function App() {
   const [filter, setFilter] = useState<"all" | "completed" | "pending">("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState<
-    "createdAt_desc" | "createdAt_asc" | "title"
+    "createdAt_desc" | "createdAt_asc" | "title" | "priority" | "completed"
   >("createdAt_desc");
 
-  const addTask = (title: string) => {
+  const addTask = (title: string, priority: Priority = "medium") => {
     setTasks((prev) => [
       {
         id: uuid(),
         title,
         completed: false,
         createdAt: new Date().toISOString(),
+        priority,
       },
       ...prev,
     ]);
   };
 
-  const editTask = (id: string, newTitle: string) => {
+  const editTask = (id: string, newTitle: string, newPriority: Priority) => {
     setTasks((prev) =>
-      prev.map((task) => (task.id === id ? { ...task, title: newTitle } : task))
+      prev.map((task) =>
+        task.id === id
+          ? { ...task, title: newTitle, priority: newPriority }
+          : task
+      )
     );
   };
 
@@ -40,7 +45,13 @@ export default function App() {
   const toggleTask = (id: string) => {
     setTasks((prev) =>
       prev.map((task) =>
-        task.id === id ? { ...task, completed: !task.completed } : task
+        task.id === id
+          ? {
+              ...task,
+              completed: !task.completed,
+              completedAt: !task.completed ? new Date().toISOString() : null,
+            }
+          : task
       )
     );
   };
@@ -60,7 +71,15 @@ export default function App() {
       return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
     } else if (sortBy === "createdAt_asc") {
       return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
-    } else {
+    } else if (sortBy === "priority") {
+      const priorityValue = { high: 3, medium: 2, low: 1 };
+      return priorityValue[b.priority] - priorityValue[a.priority];
+    } else if (sortBy === "completed") {
+      return (
+        (b.completedAt ? new Date(b.completedAt).getTime() : 0) -
+        (a.completedAt ? new Date(a.completedAt).getTime() : 0)
+      );
+    }else {
       return a.title.localeCompare(b.title);
     }
   });

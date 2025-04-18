@@ -1,9 +1,14 @@
 import TaskItem from "./TaskItem";
-import { Task } from "../types/Task";
+import { Priority, Task } from "../types/Task";
 
 type Props = {
   tasks: Task[];
-  onEdit: (id: string, newTitle: string) => void;
+  onEdit: (
+    id: string,
+    newTitle: string,
+    priority: Priority,
+    description?: string
+  ) => void;
   onDelete: (id: string) => void;
   onToggle: (id: string) => void;
 };

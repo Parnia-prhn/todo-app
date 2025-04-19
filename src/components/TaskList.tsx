@@ -7,7 +7,8 @@ type Props = {
     id: string,
     newTitle: string,
     priority: Priority,
-    description?: string
+    description?: string,
+    reminderAt?: string
   ) => void;
   onDelete: (id: string) => void;
   onToggle: (id: string) => void;

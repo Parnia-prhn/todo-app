@@ -8,4 +8,5 @@ export type Task = {
   completedAt?: string | null;
   priority: Priority;
   description?: string;
+  reminderAt?: string;
 };

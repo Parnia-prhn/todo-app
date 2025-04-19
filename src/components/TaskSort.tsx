@@ -29,7 +29,7 @@ export default function TaskSort({ sortBy, onChange }: Props) {
         <option value="createdAt_asc">قدیمی‌ترین</option>
         <option value="title">عنوان (الفبا)</option>
       </select>
-      <label className="ml-2">مرتب سازی بر اساس</label>
+      <label className="ml-2   text-sm">مرتب سازی بر اساس</label>
     </div>
   );
 }

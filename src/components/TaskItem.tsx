@@ -10,7 +10,8 @@ type Props = {
     id: string,
     newText: string,
     priority: Priority,
-    description?: string
+    description?: string,
+    reminderAt?: string
   ) => void;
 };
 
@@ -18,7 +19,9 @@ export default function TaskItem({ task, onToggle, onDelete, onEdit }: Props) {
   const [isEditing, setIsEditing] = useState(false);
   const [editTitle, setEditTitle] = useState(task.title);
   const [editedPriority, setEditedPriority] = useState<Priority>(task.priority);
-  const [editedDescription, setEditedDescription] = useState("");
+  const [editedDescription, setEditedDescription] = useState(task?.description);
+  const [editedReminderAt, setEditedReminderAt] = useState(task?.reminderAt);
+  console.log("rr", task?.reminderAt);
   const handleSave = () => {
     if (editTitle.trim()) {
       onEdit(task.id, editTitle.trim(), editedPriority, editedDescription);
@@ -41,6 +44,8 @@ export default function TaskItem({ task, onToggle, onDelete, onEdit }: Props) {
               onClick={() => {
                 setIsEditing(false);
                 setEditTitle(task.title);
+                setEditedDescription(task?.description);
+                setEditedReminderAt(task?.reminderAt);
               }}
               className="cursor-pointer bg-blue-300 p-1 rounded-full"
             >
@@ -75,6 +80,8 @@ export default function TaskItem({ task, onToggle, onDelete, onEdit }: Props) {
                 if (e.key === "Escape") {
                   setIsEditing(false);
                   setEditTitle(task.title);
+                  setEditedDescription(task?.description);
+                  setEditedReminderAt(task?.reminderAt);
                 }
               }}
               autoFocus
@@ -84,6 +91,12 @@ export default function TaskItem({ task, onToggle, onDelete, onEdit }: Props) {
               value={editedDescription}
               onChange={(e) => setEditedDescription(e.target.value)}
               className="border p-2 rounded w-full mt-2 h-20 resize-none"
+            />
+            <input
+              type="datetime-local"
+              value={editedReminderAt}
+              onChange={(e) => setEditedReminderAt(e.target.value)}
+              className="border p-2 rounded w-full"
             />
             <div className="flex flex-row gap-2 items-center justify-center">
               <select
@@ -99,26 +112,36 @@ export default function TaskItem({ task, onToggle, onDelete, onEdit }: Props) {
             </div>
           </div>
         ) : (
-          <span
-            onClick={() => onToggle(task.id)}
-            className={`cursor-pointer mx-2 ${
-              task.completed ? "line-through text-gray-400" : ""
-            }`}
-          >
-            {task.title}
-          </span>
+          <div>
+            <span
+              onClick={() => onToggle(task.id)}
+              className={`cursor-pointer mx-2 ${
+                task.completed ? "line-through text-gray-400" : ""
+              }`}
+            >
+              {task.title}
+            </span>
+            {task?.description && (
+              <p className="w-[150px] p-1 border border-gray-300 rounded text-sm  text-gray-600 mx-2 whitespace-pre-wrap">
+                {task?.description}
+              </p>
+            )}
+            {task.reminderAt &&
+              new Date(task.reminderAt) <= new Date() &&
+              !task.completed && (
+                <p className="text-red-500 text-sm my-2">
+                  ⏰ زمان یادآوری رسیده!
+                </p>
+              )}
+            <PriorityBadge priority={task.priority} />
+          </div>
         )}
-        {task.description && (
-        <p className="text-sm text-gray-600 mt-1 whitespace-pre-wrap">
-          {task.description}
-        </p>
-        )}
+
         {task.completed && task.completedAt && (
           <p className="text-xs text-green-600 mx-4">
             تکمیل‌شده در: {new Date(task.completedAt).toLocaleString("fa-IR")}
           </p>
         )}
-        <PriorityBadge priority={task.priority} />
       </div>
     </div>
   );

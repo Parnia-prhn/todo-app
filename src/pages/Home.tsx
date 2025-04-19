@@ -6,16 +6,56 @@ import TaskList from "../components/TaskList";
 import TaskFilter from "../components/TaskFilter";
 import TaskSearch from "../components/TaskSearch";
 import TaskSort from "../components/TaskSort";
+import { useEffect, useRef } from "react";
+import ConfirmDialog from "../components/ConfirmDialog";
 
 export default function App() {
-  const [tasks, setTasks] = useState<Task[]>([]);
+  const [tasks, setTasks] = useState<Task[]>(() => {
+    const saved = localStorage.getItem("tasks");
+    return saved ? JSON.parse(saved) : [];
+  });
   const [filter, setFilter] = useState<"all" | "completed" | "pending">("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState<
     "createdAt_desc" | "createdAt_asc" | "title" | "priority" | "completed"
   >("createdAt_desc");
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+  useEffect(() => {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+  }, [tasks]);
+  const handleClearAll = () => {
+    setIsConfirmOpen(true);
+  };
 
-  const addTask = (title: string, priority: Priority = "medium") => {
+  const confirmDeleteAll = () => {
+    setTasks([]);
+  };
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      tasks.forEach((task) => {
+        if (
+          task.reminderAt &&
+          !task.completed &&
+          new Date(task.reminderAt) <= new Date()
+        ) {
+          if (audioRef.current) {
+            audioRef.current.play();
+          }
+        }
+      });
+    }, 60000);
+
+    return () => clearInterval(interval);
+  }, [tasks]);
+
+  const addTask = (
+    title: string,
+    priority: Priority = "medium",
+    description?: string,
+    reminderAt?: string
+  ) => {
     setTasks((prev) => [
       {
         id: uuid(),
@@ -23,16 +63,30 @@ export default function App() {
         completed: false,
         createdAt: new Date().toISOString(),
         priority,
+        description,
+        reminderAt,
       },
       ...prev,
     ]);
   };
 
-  const editTask = (id: string, newTitle: string, newPriority: Priority) => {
+  const editTask = (
+    id: string,
+    newTitle: string,
+    newPriority: Priority,
+    description?: string,
+    reminderAt?: string
+  ) => {
     setTasks((prev) =>
       prev.map((task) =>
         task.id === id
-          ? { ...task, title: newTitle, priority: newPriority }
+          ? {
+              ...task,
+              title: newTitle,
+              priority: newPriority,
+              description: description,
+              reminderAt: reminderAt,
+            }
           : task
       )
     );
@@ -79,7 +133,7 @@ export default function App() {
         (b.completedAt ? new Date(b.completedAt).getTime() : 0) -
         (a.completedAt ? new Date(a.completedAt).getTime() : 0)
       );
-    }else {
+    } else {
       return a.title.localeCompare(b.title);
     }
   });
@@ -91,11 +145,27 @@ export default function App() {
       <TaskSearch query={searchQuery} onChange={setSearchQuery} />
       <TaskFilter filter={filter} onChange={setFilter} />
       <TaskSort sortBy={sortBy} onChange={setSortBy} />
+      {tasks.length !== 0 && (
+        <button
+          onClick={handleClearAll}
+          className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+        >
+          حذف همه تسک‌ها
+        </button>
+      )}
       <TaskList
         tasks={sorted}
         onEdit={editTask}
         onDelete={deleteTask}
         onToggle={toggleTask}
+      />
+      <audio ref={audioRef} src="/bell.wav" preload="auto" />
+      <ConfirmDialog
+        isOpen={isConfirmOpen}
+        onClose={() => setIsConfirmOpen(false)}
+        onConfirm={confirmDeleteAll}
+        title="حذف همه تسک‌ها"
+        message="آیا مطمئنی می‌خوای همه تسک‌ها حذف بشن؟"
       />
     </div>
   );

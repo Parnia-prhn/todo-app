@@ -2,9 +2,9 @@ import { Priority } from "../types/Task";
 
 export default function PriorityBadge({ priority }: { priority: Priority }) {
   const colorMap = {
-    low: "bg-green-400",
-    medium: "bg-gray-400",
-    high: "bg-red-400",
+    low: "bg-gradient-to-r from-green-400 to-green-500",
+    medium: "bg-gradient-to-r from-yellow-400 to-yellow-500",
+    high: "bg-gradient-to-r from-red-400 to-red-500",
   };
 
   const labelMap = {
@@ -14,7 +14,7 @@ export default function PriorityBadge({ priority }: { priority: Priority }) {
   };
   return (
     <span
-      className={`flex justify-center text-white text-xs px-1 py-1 rounded ${colorMap[priority]}`}
+      className={`inline-flex items-center text-white text-[10px] px-2 py-0.5 rounded-full shadow-sm ${colorMap[priority]}`}
     >
       {labelMap[priority]}
     </span>

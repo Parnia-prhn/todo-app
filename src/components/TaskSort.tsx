@@ -17,12 +17,12 @@ type Props = {
 
 export default function TaskSort({ sortBy, onChange }: Props) {
   return (
-    <div className="mb-4">
-      <label className="ml-2   text-sm">مرتب سازی بر اساس</label>
+    <div className="space-y-1">
+      <label className="block text-xs font-medium text-gray-700">مرتب سازی بر اساس</label>
       <select
         value={sortBy}
         onChange={(e) => onChange(e.target.value as any)}
-        className="border border-gray-400 px-3 py-2 rounded"
+        className="w-full px-3 py-1.5 text-sm border border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
       >
         <option value="priority">اولویت بالا</option>
         <option value="completed">تاریخ تکمیل</option>

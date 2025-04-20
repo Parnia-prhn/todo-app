@@ -139,26 +139,35 @@ export default function App() {
   });
 
   return (
-    <div className="bg-white border-blue-400 max-w-auto mx-auto border-12  p-4 flex  flex-col gap-4 items-center">
-      <h1 className="text-2xl font-bold mb-4">لیست کارها</h1>
-      <TaskForm onAdd={addTask} />
-      <TaskSearch query={searchQuery} onChange={setSearchQuery} />
-      <TaskFilter filter={filter} onChange={setFilter} />
-      <TaskSort sortBy={sortBy} onChange={setSortBy} />
-      {tasks.length !== 0 && (
-        <button
-          onClick={handleClearAll}
-          className="text-red-500  hover:text-red-600 cursor-pointer"
-        >
-          حذف همه تسک‌ها
-        </button>
-      )}
-      <TaskList
-        tasks={sorted}
-        onEdit={editTask}
-        onDelete={deleteTask}
-        onToggle={toggleTask}
-      />
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50">
+      <div className="max-w-4xl mx-auto px-4 py-8">
+        <h1 className="text-4xl font-bold text-blue-900 mb-8 text-center tracking-tight">
+          لیست کارها
+          <span className="block text-sm font-normal text-blue-600 mt-2">مدیریت کارهای روزمره</span>
+        </h1>
+        <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl p-8 space-y-8 border border-blue-100/50">
+          <TaskForm onAdd={addTask} />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <TaskSearch query={searchQuery} onChange={setSearchQuery} />
+            <TaskFilter filter={filter} onChange={setFilter} />
+            <TaskSort sortBy={sortBy} onChange={setSortBy} />
+          </div>
+          {tasks.length !== 0 && (
+            <button
+              onClick={handleClearAll}
+              className="text-red-500 hover:text-red-600 font-medium transition-colors duration-200 hover:scale-105 transform"
+            >
+              حذف همه تسک‌ها
+            </button>
+          )}
+          <TaskList
+            tasks={sorted}
+            onEdit={editTask}
+            onDelete={deleteTask}
+            onToggle={toggleTask}
+          />
+        </div>
+      </div>
       <audio ref={audioRef} src="/bell.wav" preload="auto" />
       <ConfirmDialog
         isOpen={isConfirmOpen}

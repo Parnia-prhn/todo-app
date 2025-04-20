@@ -5,15 +5,15 @@ type Props = {
 
 export default function TaskFilter({ filter, onChange }: Props) {
   return (
-    <div className="flex gap-2 mb-4">
+    <div className="flex gap-2">
       {["all", "completed", "pending"].map((type) => (
         <button
           key={type}
           onClick={() => onChange(type as any)}
-          className={`px-3 py-1 rounded border border-gray-400 ${
+          className={`px-3 py-1.5 text-sm rounded-lg font-medium transition-colors duration-200 ${
             filter === type
-              ? "bg-blue-500 text-white"
-              : "bg-white text-gray-700"
+              ? "bg-blue-600 text-white shadow-sm"
+              : "bg-white text-gray-700 hover:bg-blue-50 border border-blue-200"
           }`}
         >
           {type === "all"

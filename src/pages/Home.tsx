@@ -139,7 +139,7 @@ export default function App() {
   });
 
   return (
-    <div className="bg-white border-blue-400 max-w-2xl mx-auto border-12  p-4 flex  flex-col gap-4 items-center">
+    <div className="bg-white border-blue-400 max-w-auto mx-auto border-12  p-4 flex  flex-col gap-4 items-center">
       <h1 className="text-2xl font-bold mb-4">لیست کارها</h1>
       <TaskForm onAdd={addTask} />
       <TaskSearch query={searchQuery} onChange={setSearchQuery} />
@@ -148,7 +148,7 @@ export default function App() {
       {tasks.length !== 0 && (
         <button
           onClick={handleClearAll}
-          className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+          className="text-red-500  hover:text-red-600 cursor-pointer"
         >
           حذف همه تسک‌ها
         </button>

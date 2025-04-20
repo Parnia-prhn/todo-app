@@ -30,44 +30,6 @@ export default function TaskItem({ task, onToggle, onDelete, onEdit }: Props) {
   };
   return (
     <div className="flex justify-between p-4 border border-gray-400 rounded">
-      <div className="flex items-center gap-2 ">
-        {isEditing ? (
-          <div className="flex items-center gap-2">
-            <button
-              onClick={handleSave}
-              className="cursor-pointer bg-blue-300 p-1 rounded-full"
-            >
-              ✔
-            </button>
-
-            <button
-              onClick={() => {
-                setIsEditing(false);
-                setEditTitle(task.title);
-                setEditedDescription(task?.description);
-                setEditedReminderAt(task?.reminderAt);
-              }}
-              className="cursor-pointer bg-blue-300 p-1 rounded-full"
-            >
-              🗙
-            </button>
-          </div>
-        ) : (
-          <button
-            onClick={() => setIsEditing(true)}
-            className="cursor-pointer bg-blue-300 p-1 rounded-full"
-          >
-            ✏️
-          </button>
-        )}
-
-        <button
-          onClick={() => onDelete(task.id)}
-          className="cursor-pointer bg-blue-300 p-1 rounded-full"
-        >
-          🗑
-        </button>
-      </div>
       <div className="flex flex-col gap-2">
         {isEditing ? (
           <div className="flex flex-col gap-2">
@@ -90,15 +52,16 @@ export default function TaskItem({ task, onToggle, onDelete, onEdit }: Props) {
               placeholder="توضیحات..."
               value={editedDescription}
               onChange={(e) => setEditedDescription(e.target.value)}
-              className="border p-2 rounded w-full mt-2 h-20 resize-none"
+              className="border border-gray-400 p-2 rounded w-full mt-2 h-20 resize-none"
             />
             <input
               type="datetime-local"
               value={editedReminderAt}
               onChange={(e) => setEditedReminderAt(e.target.value)}
-              className="border p-2 rounded w-full"
+              className="border border-gray-400 p-2 rounded w-full"
             />
             <div className="flex flex-row gap-2 items-center justify-center">
+              <label className="">با اولوبت</label>
               <select
                 className="border border-gray-400 rounded p-2"
                 value={editedPriority}
@@ -108,19 +71,25 @@ export default function TaskItem({ task, onToggle, onDelete, onEdit }: Props) {
                 <option value="medium">متوسط</option>
                 <option value="high">زیاد</option>
               </select>
-              <label className="">با اولوبت</label>
             </div>
           </div>
         ) : (
           <div>
-            <span
-              onClick={() => onToggle(task.id)}
-              className={`cursor-pointer mx-2 ${
-                task.completed ? "line-through text-gray-400" : ""
-              }`}
-            >
-              {task.title}
-            </span>
+            <div className="flex flex-row gap-2">
+              <input
+                type="checkbox"
+                checked={task.completed}
+                onChange={() => onToggle(task.id)}
+                className="ml-2"
+              />
+              <span
+                className={`cursor-pointer mx-2 ${
+                  task.completed ? "line-through text-gray-400" : ""
+                }`}
+              >
+                {task.title}
+              </span>
+            </div>
             {task?.description && (
               <p className="w-[150px] p-1 border border-gray-300 rounded text-sm  text-gray-600 mx-2 whitespace-pre-wrap">
                 {task?.description}
@@ -142,6 +111,44 @@ export default function TaskItem({ task, onToggle, onDelete, onEdit }: Props) {
             تکمیل‌شده در: {new Date(task.completedAt).toLocaleString("fa-IR")}
           </p>
         )}
+      </div>
+      <div className="flex items-center gap-2  ">
+        {isEditing ? (
+          <div className="mr-2 flex items-center gap-2">
+            <button
+              onClick={handleSave}
+              className="cursor-pointer bg-blue-300 p-1 rounded-full"
+            >
+              ✔
+            </button>
+
+            <button
+              onClick={() => {
+                setIsEditing(false);
+                setEditTitle(task.title);
+                setEditedDescription(task?.description);
+                setEditedReminderAt(task?.reminderAt);
+              }}
+              className="cursor-pointer bg-blue-300 p-1 rounded-full"
+            >
+              🗙
+            </button>
+          </div>
+        ) : (
+          <button
+            onClick={() => setIsEditing(true)}
+            className="mr-2 cursor-pointer bg-blue-300 p-1 rounded-full"
+          >
+            ✏️
+          </button>
+        )}
+
+        <button
+          onClick={() => onDelete(task.id)}
+          className="cursor-pointer bg-blue-300 p-1 rounded-full"
+        >
+          🗑
+        </button>
       </div>
     </div>
   );

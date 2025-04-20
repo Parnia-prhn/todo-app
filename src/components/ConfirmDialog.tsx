@@ -23,7 +23,7 @@ export default function ConfirmDialog({
         <div className="flex justify-center gap-4 mt-4">
           <button
             onClick={onClose}
-            className="px-4 py-2 rounded border text-gray-700 hover:bg-gray-100"
+            className="px-4 py-2 rounded border border-gray-400 text-gray-700 hover:bg-gray-100"
           >
             انصراف
           </button>

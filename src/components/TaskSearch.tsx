@@ -11,7 +11,7 @@ export default function TaskSearch({ query, onChange }: Props) {
         placeholder="جستجو در تسک‌ها..."
         value={query}
         onChange={(e) => onChange(e.target.value)}
-        className="w-full px-3 py-2 border rounded"
+        className="w-full px-3 py-2 border border-gray-400 rounded"
       />
     </div>
   );

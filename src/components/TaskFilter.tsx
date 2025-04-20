@@ -10,7 +10,7 @@ export default function TaskFilter({ filter, onChange }: Props) {
         <button
           key={type}
           onClick={() => onChange(type as any)}
-          className={`px-3 py-1 rounded border ${
+          className={`px-3 py-1 rounded border border-gray-400 ${
             filter === type
               ? "bg-blue-500 text-white"
               : "bg-white text-gray-700"

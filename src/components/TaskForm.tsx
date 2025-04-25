@@ -28,10 +28,15 @@ export default function TaskForm({ onAdd }: Props) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white/90 backdrop-blur-sm rounded-xl shadow-lg p-6 border border-blue-100/50">
+    <form
+      onSubmit={handleSubmit}
+      className="bg-white/90 backdrop-blur-sm rounded-xl shadow-lg p-6 border border-blue-100/50"
+    >
       <div className="space-y-6">
         <div className="space-y-2">
-          <label className="block text-sm font-medium text-gray-700 tracking-wide">عنوان تسک</label>
+          <label className="block text-sm font-medium text-gray-700 tracking-wide">
+            عنوان تسک
+          </label>
           <input
             type="text"
             placeholder="عنوان تسک..."
@@ -43,7 +48,9 @@ export default function TaskForm({ onAdd }: Props) {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-2">
-            <label className="block text-sm font-medium text-gray-700 tracking-wide">با اولوبت</label>
+            <label className="block text-sm font-medium text-gray-700 tracking-wide">
+              با اولوبت
+            </label>
             <select
               className="w-full px-4 py-2.5 border border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-white/50"
               value={priority}
@@ -56,7 +63,9 @@ export default function TaskForm({ onAdd }: Props) {
           </div>
 
           <div className="space-y-2">
-            <label className="block text-sm font-medium text-gray-700 tracking-wide">به من یادآوری کن در</label>
+            <label className="block text-sm font-medium text-gray-700 tracking-wide">
+              به من یادآوری کن در
+            </label>
             <input
               type="datetime-local"
               value={reminderAt}
@@ -67,7 +76,9 @@ export default function TaskForm({ onAdd }: Props) {
         </div>
 
         <div className="space-y-2">
-          <label className="block text-sm font-medium text-gray-700 tracking-wide">توضیحات</label>
+          <label className=" block text-sm font-medium text-gray-700 tracking-wide">
+            توضیحات
+          </label>
           <textarea
             placeholder="توضیحات..."
             value={description}

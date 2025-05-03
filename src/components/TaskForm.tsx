@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Priority } from "../types/Task";
+import { useAuth } from "./auth-context";
 
 type Props = {
   onAdd: (
@@ -11,15 +12,22 @@ type Props = {
 };
 
 export default function TaskForm({ onAdd }: Props) {
+  const { isLoggedIn } = useAuth();
   const [title, setTitle] = useState("");
   const [priority, setPriority] = useState<Priority>("medium");
   const [description, setDescription] = useState("");
   const [reminderAt, setReminderAt] = useState("");
+  const [error, setError] = useState<string | null>(null);
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const trimmed = title.trim();
 
-    if (!trimmed) return;
+    if (!trimmed) {
+      setError("عنوان تسک نمی‌تواند خالی باشد.");
+      return;
+    }
+    setError(null);
+
     onAdd(trimmed, priority, description, reminderAt);
     setTitle("");
     setPriority("medium");

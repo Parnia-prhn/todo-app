@@ -8,18 +8,39 @@ import TaskSearch from "../components/TaskSearch";
 import TaskSort from "../components/TaskSort";
 import { useEffect, useRef } from "react";
 import ConfirmDialog from "../components/ConfirmDialog";
+import { useAuth } from "../components/auth-context";
 
 export default function App() {
-  const [tasks, setTasks] = useState<Task[]>(() => {
-    const saved = localStorage.getItem("tasks");
-    return saved ? JSON.parse(saved) : [];
-  });
+  const { isLoggedIn } = useAuth();
+  const [tasks, setTasks] = useState<Task[]>([]);
   const [filter, setFilter] = useState<"all" | "completed" | "pending">("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState<
     "createdAt_desc" | "createdAt_asc" | "title" | "priority" | "completed"
   >("createdAt_desc");
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+  useEffect(() => {
+    const loadTasks = async () => {
+      if (isLoggedIn) {
+        // از API بخونه
+        const res = await fetch("/api/tasks", {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        const data = await res.json();
+        setTasks(data);
+      } else {
+        () => {
+          const saved = localStorage.getItem("tasks");
+          return saved ? JSON.parse(saved) : [];
+        };
+      }
+    };
+
+    loadTasks();
+  }, [isLoggedIn]);
+
   useEffect(() => {
     localStorage.setItem("tasks", JSON.stringify(tasks));
   }, [tasks]);
@@ -143,7 +164,9 @@ export default function App() {
       <div className="max-w-4xl mx-auto px-4 py-8">
         <h1 className="text-4xl font-bold text-blue-900 mb-8 text-center tracking-tight">
           لیست کارها
-          <span className="block text-sm font-normal text-blue-600 mt-2">مدیریت کارهای روزمره</span>
+          <span className="block text-sm font-normal text-blue-600 mt-2">
+            مدیریت کارهای روزمره
+          </span>
         </h1>
         <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl p-8 space-y-8 border border-blue-100/50">
           <TaskForm onAdd={addTask} />
